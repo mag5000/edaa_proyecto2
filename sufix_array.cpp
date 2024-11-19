@@ -83,16 +83,21 @@ public:
         return end - start;
     }
 
-    size_t getMemorySize() const {
-        size_t size = sizeof(suffix_array); // Tamaño estático de la instancia (sin contar texto y suffixArray)
+    int64_t getMemorySize() const {
+        //size_t size = sizeof(suffix_array); // Tamaño estático de la instancia (sin contar texto y suffixArray)
         
         // Agregar tamaño del string `text`
         //size += text.capacity(); // Usamos `capacity()` en lugar de `size()` para incluir la memoria asignada dinámicamente
         
         // Agregar tamaño del vector `suffixArray`
-        size += suffixArray.capacity() * sizeof(int); // `capacity()` para contar la memoria reservada
+        //size += suffixArray.capacity() * sizeof(int); // `capacity()` para contar la memoria reservada
 
-        return size;
+        //return size;
+
+        // se agrega el m todo para retornar el tama o del SA
+        
+        return sizeof(std::int64_t) * suffixArray.size();
+
     }
 
 };
