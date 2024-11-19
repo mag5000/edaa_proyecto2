@@ -87,7 +87,7 @@ public:
         size_t size = sizeof(suffix_array); // Tamaño estático de la instancia (sin contar texto y suffixArray)
         
         // Agregar tamaño del string `text`
-        size += text.capacity(); // Usamos `capacity()` en lugar de `size()` para incluir la memoria asignada dinámicamente
+        //size += text.capacity(); // Usamos `capacity()` en lugar de `size()` para incluir la memoria asignada dinámicamente
         
         // Agregar tamaño del vector `suffixArray`
         size += suffixArray.capacity() * sizeof(int); // `capacity()` para contar la memoria reservada

@@ -88,7 +88,7 @@ public:
 
     size_t getMemorySize() const {
         size_t size = sizeof(SuffixArrayLCP);
-        size += text.capacity();
+        //size += text.capacity();
         size += suffixArray.capacity() * sizeof(int);
         size += lcpArray.capacity() * sizeof(int);
         return size;

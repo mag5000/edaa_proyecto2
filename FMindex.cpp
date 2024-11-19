@@ -136,7 +136,7 @@ public:
         size_t size = sizeof(FMIndex); // Tamaño estático de la clase
 
         // Agregar tamaño del string `text`
-        size += text.capacity(); // Usamos `capacity()` para incluir la memoria reservada dinámicamente
+        //size += text.capacity(); // Usamos `capacity()` para incluir la memoria reservada dinámicamente
 
         // Agregar tamaño de la cadena `bwt`
         size += bwt.capacity(); // Usamos `capacity()` para incluir la memoria reservada
