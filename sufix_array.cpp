@@ -4,6 +4,7 @@
 #include <algorithm>
 
 class suffix_array {
+    
 private:
     std::string text;
     std::vector<int> suffixArray;

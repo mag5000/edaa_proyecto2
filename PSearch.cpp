@@ -93,7 +93,7 @@ void SA_search_time(string text, vector<string> patterns){
     suffix_array sa(text);// creación suffix_array; 
     int patterns_size = patterns.size();
 
-    cout << "===== SA ===== " << endl;
+    cout << "--- SA --- " << endl;
 
     for (int i = 0 ; i < patterns_size ;i++){
 
@@ -106,7 +106,7 @@ void SA_search_time(string text, vector<string> patterns){
         
         outfile << "Sufix Array," << patterns[i].size() << "," << duration <<endl;
 
-        cout<< "Pattern Size: " << patterns[i].size() << "-  Time: " << duration << endl;
+        cout<< "Pattern Size: " << patterns[i].size() << "  -  Time: " << duration << endl;
 
     }
     
@@ -123,7 +123,7 @@ void LCP_search_time(string text, vector<string> patterns){
     SuffixArrayLCP lcp(text);// creación estructura 
     int patterns_size = patterns.size();
 
-    cout << "===== SA+LCP ===== " << endl;
+    cout << "--- SA+LCP --- " << endl;
 
     for (int i = 0 ; i < patterns_size ;i++){
 
@@ -135,7 +135,7 @@ void LCP_search_time(string text, vector<string> patterns){
         long long duration = chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count();
         
         outfile << "SA+LCP," << patterns[i].size() << "," << duration <<endl;
-        cout<< "Pattern Size: " << patterns[i].size() << "-  Time: " << duration << endl;
+        cout<< "Pattern Size: " << patterns[i].size() << "  -  Time: " << duration << endl;
 
     }
     outfile.close(); 
@@ -150,7 +150,7 @@ void FMI_search_time(string text, vector<string> patterns){
     FMIndex fmi(text);// creación estructura 
     int patterns_size = patterns.size();
 
-    cout << "===== FMI ===== " << endl;
+    cout << "--- FMI --- " << endl;
 
     for (int i = 0 ; i < patterns_size ;i++){
 
@@ -162,7 +162,7 @@ void FMI_search_time(string text, vector<string> patterns){
         long long duration = chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count();
         
         outfile << "FMI," << patterns[i].size() << "," << duration <<endl;
-        cout<< "Pattern Size: " << patterns[i].size() << "-  Time: " << duration << endl;
+        cout<< "Pattern Size: " << patterns[i].size() << "  -  Time: " << duration << endl;
 
     }
     outfile.close(); 
