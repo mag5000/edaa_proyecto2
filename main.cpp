@@ -54,28 +54,50 @@ string getRandomSubstring(const string& str, int substringLength) {
 // main
 int main() {
 
-    std::string test_text = "bananananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db ana nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe dbnanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db";
-    std::string filePath = "proteins";
+    // Lectura del archivo a utilizar --------------------------------------------------------
+    std::string filePath = "proteins";   
     std::string text = readFile(filePath);
-    cout<< "Lectura de texto: OK" << endl << endl;
+    //std::string text = "bananananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db ana nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe dbnanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db";
+    //std::string text = "banana banana";
+    //cout<< "Lectura de texto: OK" << endl << endl; 
+    //cout << "Length: " << text.length() <<endl;
+    //cout << "Size: " << sizeof(text) <<endl;
+
+    int times = 0;
+
+    // pruebas de busqueda simples: -----------------------------------------------------------
+    suffix_array sa(text);// creación suffix_array;
+    times = sa.countOcurrences("the");
+    cout << "SA times:" << times <<endl;
+
+    SuffixArrayLCP lcp(text);
+    times = lcp.countOccurrences("the");
+    cout << "LCP times:" << times <<endl;
+
+    // FMIndex fmi(text);
+    // times = fmi.countOccurrences("ban");
+    // cout << "FMI times:" << times <<endl;
+
+    // Experimentos de creación --------------------------------------------------------------
+    // cout<< " =========== Creación ========== " << endl;
+    // SA_creation_time(text);
+    // LCP_creation_time(text);
+    // FMI_creation_time(text);
+
+
+    // Experimentos de búsqueda complejos --------------------------------------------------------------
+    // vector<string> patterns;
+    // for (int i = 10 ; i<=100 ; i=i+10 ){
+    //     patterns.push_back(getRandomSubstring(text,i));
+    // }
     
-    cout<< " =========== Creación ========== " << endl;
-    SA_creation_time(test_text);
-    LCP_creation_time(test_text);
-    FMI_creation_time(test_text);
+    // cout<< " ========== Búsqueda =========== " << endl;
+    // SA_search_time(text, patterns, 2);
+    // LCP_search_time(text, patterns, 2);
+    // FMI_search_time(text, patterns, 1);
 
-    vector<string> patterns;
 
-    for (int i = 10 ; i<=100 ; i=i+10 ){
 
-        patterns.push_back(getRandomSubstring(test_text,i));
-
-    }
-
-    cout<< " ========== Búsqueda =========== " << endl;
-    SA_search_time(test_text, patterns);
-    LCP_search_time(test_text, patterns);
-    FMI_search_time(test_text, patterns);
-
+    
     return 0;
 }

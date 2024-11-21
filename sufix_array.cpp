@@ -75,7 +75,7 @@ public:
     }
 
     // Función count: Cuenta el número de ocurrencias del patrón
-    int count(const std::string& pattern) const {
+    int countOcurrences(const std::string& pattern) const {
         if (pattern.empty()) return 0;
 
         int start = lowerBound(pattern);

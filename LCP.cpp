@@ -62,28 +62,40 @@ public:
     int countOccurrences(const std::string& pattern) {
         int left = 0, right = suffixArray.size() - 1;
         int m = pattern.size();
+        int count = 0;
 
-        // Buscar el límite inferior utilizando LCP
+        // Búsqueda binaria para encontrar el primer sufijo que contiene el patrón
         while (left <= right) {
             int mid = left + (right - left) / 2;
             int suffixIndex = suffixArray[mid];
-            int lcp = lcpArray[mid > 0 ? mid - 1 : 0]; // LCP con el sufijo anterior
+            std::string suffix = text.substr(suffixIndex, m);
 
-            if (lcp < m) {
-                std::string suffix = text.substr(suffixIndex, m);
-
-                if (suffix < pattern) {
-                    left = mid + 1;
-                } else {
-                    right = mid - 1;
-                }
+            if (suffix < pattern) {
+                left = mid + 1;
+            } else if (suffix > pattern) {
+                right = mid - 1;
             } else {
-                // Si LCP >= m, significa que el patrón está contenido en los sufijos cercanos
-                return right - left + 1;
+                // El patrón coincide con el sufijo en la posición `mid`
+                count++;
+
+                // Buscar hacia la izquierda usando LCP
+                int leftIdx = mid - 1;
+                while (leftIdx >= left && text.substr(suffixArray[leftIdx], m) == pattern) {
+                    count++;
+                    leftIdx--;
+                }
+
+                // Buscar hacia la derecha usando LCP
+                int rightIdx = mid + 1;
+                while (rightIdx <= right && text.substr(suffixArray[rightIdx], m) == pattern) {
+                    count++;
+                    rightIdx++;
+                }
+                break;
             }
         }
 
-        return 0;
+        return count;
     }
 
     int64_t getMemorySize() const {
