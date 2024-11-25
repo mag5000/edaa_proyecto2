@@ -8,7 +8,7 @@
 #include <iostream>
 #include <cstdint>
 #include <vector>
-#include "FMindex.cpp"
+#include "fm-index.cpp"
 #include "LCP.cpp"
 #include "sufix_array.cpp"
 

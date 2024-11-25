@@ -4,10 +4,10 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
-//#include "FMindex.cpp"
-//#include "LCP.cpp"
-#include "PSearch.cpp"
-//#include "sufix_array.cpp"
+#include "fm-index.cpp"
+#include "LCP.cpp"
+//#include "PSearch.cpp"
+#include "sufix_array.cpp"
 
 using namespace std;
 
@@ -56,8 +56,8 @@ int main() {
 
     // Lectura del archivo a utilizar --------------------------------------------------------
     std::string filePath = "proteins";   
-    std::string text = readFile(filePath);
-    //std::string text = "bananananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db ana nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe dbnanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db";
+    // std::string text = readFile(filePath);
+    std::string text = "bananananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db ana nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe dbnanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db";
     //std::string text = "banana banana";
     //cout<< "Lectura de texto: OK" << endl << endl; 
     //cout << "Length: " << text.length() <<endl;
@@ -66,17 +66,18 @@ int main() {
     int times = 0;
 
     // pruebas de busqueda simples: -----------------------------------------------------------
+    
     suffix_array sa(text);// creación suffix_array;
-    times = sa.countOcurrences("the");
+    times = sa.countOcurrences("ban");
     cout << "SA times:" << times <<endl;
 
     SuffixArrayLCP lcp(text);
-    times = lcp.countOccurrences("the");
+    times = lcp.countOccurrences("ban");
     cout << "LCP times:" << times <<endl;
 
-    // FMIndex fmi(text);
-    // times = fmi.countOccurrences("ban");
-    // cout << "FMI times:" << times <<endl;
+    FMIndex fmi(text);
+    times = fmi.countOccurrences("ban");
+    std::cout << "FMI times:" << times <<std::endl;
 
     // Experimentos de creación --------------------------------------------------------------
     // cout<< " =========== Creación ========== " << endl;
