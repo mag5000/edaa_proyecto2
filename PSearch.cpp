@@ -17,65 +17,71 @@ using namespace std;
 //===================================== Funciones para tomar tiempo de creacion y tamaño ====================================================================
 
 // Función que toma el tiempo de creación del Sufix Array normal
-void SA_creation_time(string text){
+void SA_creation_time(string text, int num_exp){
 
     ofstream outfile("output/SA_creation_time_seg.csv");
     outfile << "Estructura,Segundos,Bytes" <<endl;
-
-    auto start_time = chrono::high_resolution_clock::now();
-
-    suffix_array sa(text);// creación suffix_array; 
-   
-    auto end_time = chrono::high_resolution_clock::now();
-    long long duration = chrono::duration_cast<std::chrono::seconds>(end_time - start_time).count();
     
-    cout<< " SA Time: " << duration << endl;
-    cout<< " SA Size: " << sa.getMemorySize() << endl << endl;
 
+    for(int i = 0; i < num_exp ; i++){
+
+        auto start_time = chrono::high_resolution_clock::now();
+        suffix_array sa(text);// creación suffix_array; 
+        auto end_time = chrono::high_resolution_clock::now();
+        long long duration = chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
+            
+        outfile << "Sufix Array," << duration << "," << sa.getMemorySize() << endl;  
+        cout<< " SA Time: " << duration << endl;
+        cout<< " SA Size: " << sa.getMemorySize() << endl << endl;
     
-    outfile << "Sufix Array," << duration << "," << sa.getMemorySize();
+    }
+
     outfile.close(); 
 
 }
 
 // Función que toma el tiempo de creacion del Sufix Array con LCP
-void LCP_creation_time(string text){
+void LCP_creation_time(string text, int num_exp){
 
     ofstream outfile("output/LCP_creation_time_seg.csv");
     outfile << "Estructura,Segundos,Bytes" <<endl;
 
-    auto start_time = chrono::high_resolution_clock::now();
+    for(int i = 0; i < num_exp ; i++){
 
-    SuffixArrayLCP lcp(text);
+        auto start_time = chrono::high_resolution_clock::now();
+        SuffixArrayLCP lcp(text);
+        auto end_time = chrono::high_resolution_clock::now();
+        long long duration = chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
+        
+        outfile << "SA + LCP," << duration << "," << lcp.getMemorySize() <<endl;
+        cout<< " LCP Time: " << duration << endl;
+        cout<< " LCP Size: " << lcp.getMemorySize() << endl << endl; 
 
-    auto end_time = chrono::high_resolution_clock::now();
-    long long duration = chrono::duration_cast<std::chrono::seconds>(end_time - start_time).count();
+    }
     
-    cout<< " LCP Time: " << duration << endl;
-    cout<< " LCP Size: " << lcp.getMemorySize() << endl << endl; 
-    
-    outfile << "SA + LCP," << duration << "," << lcp.getMemorySize();
     outfile.close(); 
 
 }
 
 // Función que toma el tiempo de creacio del FM Index
-void FMI_creation_time(string text){
+void FMI_creation_time(string text, int num_exp){
 
     ofstream outfile("output/FMI_creation_time_seg.csv");
     outfile << "Estructura,Segundos,Bytes" <<endl;
 
-    auto start_time = chrono::high_resolution_clock::now();
-    
-    FMIndex fmi(text);
-    
-    auto end_time = chrono::high_resolution_clock::now();
-    long long duration = chrono::duration_cast<std::chrono::seconds>(end_time - start_time).count();
+    for(int i = 0; i < num_exp ; i++){
 
-    cout<< " FMI Time: " << duration << endl;
-    cout<< " FMI Size: " << fmi.getMemorySize() << endl << endl;
-
-    outfile << "FMI," << duration << "," << fmi.getMemorySize();
+        auto start_time = chrono::high_resolution_clock::now();
+        FMIndex fmi(text);        
+        auto end_time = chrono::high_resolution_clock::now();
+        long long duration = chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
+        
+        outfile << "FMI," << duration << "," << fmi.getMemorySize() << endl;
+        cout<< " FMI Time: " << duration << endl;
+        cout<< " FMI Size: " << fmi.getMemorySize() << endl << endl;
+    
+    }
+   
     outfile.close(); 
 
 }
@@ -107,7 +113,7 @@ void SA_search_time(string text, vector<string> patterns, int num_exp){
             
         }
 
-        outfile << "Sufix Array," << patterns[i].size() << "," << duration/num_exp <<endl;
+        outfile << "Sufix Array," << patterns[i].size() << "," << duration/num_exp << endl;
         cout<< "Pattern Size: " << patterns[i].size() << "  -  Time: " << duration/num_exp << endl;
 
     }
@@ -139,7 +145,7 @@ void LCP_search_time(string text, vector<string> patterns, int num_exp){
             
         }
 
-        outfile << "SA+LCP," << patterns[i].size() << "," << duration/num_exp <<endl;
+        outfile << "SA+LCP," << patterns[i].size() << "," << duration/num_exp << endl;
         cout<< "Pattern Size: " << patterns[i].size() << "  -  Time: " << duration/num_exp << endl;
 
     }

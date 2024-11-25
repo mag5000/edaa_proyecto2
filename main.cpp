@@ -4,10 +4,10 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
-#include "fm-index.cpp"
-#include "LCP.cpp"
-//#include "PSearch.cpp"
-#include "sufix_array.cpp"
+//#include "fm-index.cpp"
+//#include "LCP.cpp"
+#include "PSearch.cpp"
+//#include "sufix_array.cpp"
 
 using namespace std;
 
@@ -55,47 +55,55 @@ string getRandomSubstring(const string& str, int substringLength) {
 int main() {
 
     // Lectura del archivo a utilizar --------------------------------------------------------
-    std::string filePath = "proteins";   
-    // std::string text = readFile(filePath);
-    std::string text = "bananananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db ana nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe dbnanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db";
+    std::string filePath = "english.txt";   
+    std::string text_original = readFile(filePath);
+    // std::string text = "bananananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db ana nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe dbnanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db";
     //std::string text = "banana banana";
     //cout<< "Lectura de texto: OK" << endl << endl; 
     //cout << "Length: " << text.length() <<endl;
     //cout << "Size: " << sizeof(text) <<endl;
 
     int times = 0;
+    int target_size = 1000000;
+    string text;
+
+    if (text_original.length() > target_size) {
+        text = text_original.substr(0, target_size);
+    } else {
+        text = text_original; // Caso en que no hay que cortar
+    }
 
     // pruebas de busqueda simples: -----------------------------------------------------------
     
-    suffix_array sa(text);// creación suffix_array;
-    times = sa.countOcurrences("ban");
-    cout << "SA times:" << times <<endl;
+    // suffix_array sa(text);// creación suffix_array;
+    // times = sa.countOcurrences("ban");
+    // cout << "SA times:" << times <<endl;
 
-    SuffixArrayLCP lcp(text);
-    times = lcp.countOccurrences("ban");
-    cout << "LCP times:" << times <<endl;
+    // SuffixArrayLCP lcp(text);
+    // times = lcp.countOccurrences("ban");
+    // cout << "LCP times:" << times <<endl;
 
-    FMIndex fmi(text);
-    times = fmi.countOccurrences("ban");
-    std::cout << "FMI times:" << times <<std::endl;
+    // FMIndex fmi(text);
+    // times = fmi.countOccurrences("ban");
+    // std::cout << "FMI times:" << times <<std::endl;
 
     // Experimentos de creación --------------------------------------------------------------
-    // cout<< " =========== Creación ========== " << endl;
-    // SA_creation_time(text);
-    // LCP_creation_time(text);
-    // FMI_creation_time(text);
+    cout<< " =========== Creación ========== " << endl;
+    SA_creation_time(text, 100);
+    LCP_creation_time(text, 100);
+    FMI_creation_time(text, 100);
 
 
     // Experimentos de búsqueda complejos --------------------------------------------------------------
-    // vector<string> patterns;
-    // for (int i = 10 ; i<=100 ; i=i+10 ){
-    //     patterns.push_back(getRandomSubstring(text,i));
-    // }
+    vector<string> patterns;
+    for (int i = 10 ; i<=100 ; i=i+10 ){
+        patterns.push_back(getRandomSubstring(text,i));
+    }
     
-    // cout<< " ========== Búsqueda =========== " << endl;
-    // SA_search_time(text, patterns, 2);
-    // LCP_search_time(text, patterns, 2);
-    // FMI_search_time(text, patterns, 1);
+    cout<< " ========== Búsqueda =========== " << endl;
+    SA_search_time(text, patterns, 100);
+    LCP_search_time(text, patterns, 100);
+    FMI_search_time(text, patterns, 100);
 
 
 

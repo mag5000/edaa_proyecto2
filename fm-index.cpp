@@ -15,7 +15,7 @@ public:
     // Constructor: Construye el FM-Index a partir del texto
     explicit FMIndex(const string& input_text) : text(input_text) {
         construct_im(fm_index, text, 1); // Construye el índice en memoria
-        cout << "FM-Index construido con éxito para el texto dado." << endl;
+        //cout << "FM-Index construido con éxito para el texto dado." << endl;
     }
 
     // Método para contar las ocurrencias de un patrón
@@ -25,7 +25,7 @@ public:
     }
 
     // Método para obtener el tamaño de la estructura en memoria (en bytes)
-    size_t getIndexSize() const {
+    size_t getMemorySize() const {
         return size_in_bytes(fm_index);
     }
 
