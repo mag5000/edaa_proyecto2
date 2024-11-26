@@ -1,109 +1,128 @@
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <string>
 #include <algorithm>
 #include <map>
-#include <cstdint>
-#include <numeric>
 
 class FMIndex {
 private:
-    std::string text;
-    std::string bwt;  // BWT como cadena
-    std::vector<int> C;  // Tabla C (frecuencia acumulada de caracteres)
-    std::vector<std::vector<int>> Occ;  // Tabla Occ (frecuencias acumuladas por posición)
+    std::string bwt;                // Burrows-Wheeler Transform
+    std::map<char, int> C;          // Tabla C
+    std::vector<std::map<char, int>> Occ; // Tabla Occ
 
-    // Construye el BWT usando un Suffix Array simple
-    void buildBWT() {
-
-        // std::cout << "in bwt" <<std::endl;
-
+    // Construir el Suffix Array en tiempo O(n log n)
+    std::vector<int> buildSuffixArray(const std::string& text) {
         int n = text.size();
-        std::vector<int> sa(n);
-        
-        // Construcción del Suffix Array (SA)
+        std::vector<int> suffixArray(n), rank(n), tempRank(n);
+
+        // Inicialización inicial
         for (int i = 0; i < n; ++i) {
-            sa[i] = i;
+            suffixArray[i] = i;
+            rank[i] = text[i];
         }
-       std::sort(sa.begin(), sa.end(), [this](int i, int j) {
-             return text.compare(i, text.size() - i, text, j, text.size() - j) < 0;
-        });
 
-        bwt.resize(n);
+        // Ordenar usando el algoritmo de rango-doblamiento
+        for (int k = 1; k < n; k *= 2) {
+            auto comparator = [&](int i, int j) {
+                if (rank[i] != rank[j])
+                    return rank[i] < rank[j];
+                int rank_i_k = (i + k < n) ? rank[i + k] : -1;
+                int rank_j_k = (j + k < n) ? rank[j + k] : -1;
+                return rank_i_k < rank_j_k;
+            };
+            std::sort(suffixArray.begin(), suffixArray.end(), comparator);
+
+            // Actualizar los rangos
+            tempRank[suffixArray[0]] = 0;
+            for (int i = 1; i < n; ++i) {
+                tempRank[suffixArray[i]] = tempRank[suffixArray[i - 1]];
+                if (comparator(suffixArray[i - 1], suffixArray[i]))
+                    tempRank[suffixArray[i]]++;
+            }
+            rank = tempRank;
+        }
+
+        return suffixArray;
+    }
+
+    // Generar la BWT usando el Suffix Array
+    std::string buildBWT(const std::string& text, const std::vector<int>& suffixArray) {
+        int n = text.size();
+        std::string bwtResult(n, ' ');
+
         for (int i = 0; i < n; ++i) {
-            int sa_index = sa[i];
-            bwt[i] = sa_index == 0 ? text[n - 1] : text[sa_index - 1];
-
+            int j = suffixArray[i];
+            bwtResult[i] = (j == 0) ? text[n - 1] : text[j - 1];
         }
 
-        // std::cout << "bwt ok " << std::endl;
-
+        return bwtResult;
     }
 
-   void buildTables() {
-    // std::cout << "creando c " << std::endl;
-
-    const int alphabet_size = 256;  // Supone un alfabeto de 256 caracteres ASCII
-    C.resize(alphabet_size, 0);
-
-    // Calcular frecuencias de caracteres en el BWT
-    for (char c : bwt) {
-        C[c]++;
-    }
-
-    // Convertir C en acumulada
-    for (int i = 1; i < alphabet_size; ++i) {
-        C[i] += C[i - 1];
-    }
-
-    // std::cout << "c ok " << std::endl;
-    // std::cout << "Creando Occ de manera optimizada" << std::endl;
-
-    // Usar una estructura que mantenga solo el conteo de ocurrencias en cada paso
-    std::vector<int> occ_current(alphabet_size, 0);  // Almacenar las ocurrencias de la fila actual
-
-    // Proceso de acumulación para la tabla Occ
-    for (size_t i = 0; i < bwt.size(); ++i) {
-        if (i > 0) {
-            // Solo actualizar el conteo de la posición actual (sin copiar toda la fila)
-            occ_current[bwt[i - 1]]++;
+    // Construye las tablas C y Occ
+    void buildTables() {
+        // Inicializar C
+        for (char c : bwt) {
+            C[c]++;
         }
-        
-        // Aquí puedes usar `occ_current` para obtener las ocurrencias de cualquier carácter hasta la posición `i`
-        // Si necesitas realizar consultas específicas de ocurrencias para cada carácter de `bwt[i]`, puedes hacerlo con occ_current[bwt[i]].
 
-        // Opcionalmente, si necesitas almacenar algo para cada iteración de `bwt`, lo puedes hacer aquí.
+        int sum = 0;
+        for (auto& pair : C) {
+            int temp = pair.second;
+            pair.second = sum;
+            sum += temp;
+        }
+
+        // Inicializar Occ
+        Occ.resize(bwt.size(), std::map<char, int>());
+        for (size_t i = 0; i < bwt.size(); ++i) {
+            if (i > 0) {
+                Occ[i] = Occ[i - 1];
+            }
+            Occ[i][bwt[i]]++;
+        }
     }
-
-    // std::cout << "Occ optimizada ok" << std::endl;
-}
 
 public:
-    FMIndex(const std::string &input_text) {
-        text = input_text + '\x01'; // Agregar un carácter especial para asegurar que el sufijo array tenga una terminación
-        buildBWT();
+    FMIndex(const std::string& filepath) {
+        // Leer archivo grande
+        std::ifstream file(filepath, std::ios::binary);
+        if (!file.is_open()) {
+            throw std::runtime_error("No se pudo abrir el archivo.");
+        }
+
+        std::string text((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+        file.close();
+
+        // Asegurarnos de que termine con un carácter delimitador
+        if (text.back() != '$') {
+            text += '$';
+        }
+
+        // Construir SA y BWT
+        std::vector<int> suffixArray = buildSuffixArray(text);
+        bwt = buildBWT(text, suffixArray);
+
+        // Construir tablas C y Occ
         buildTables();
     }
 
-    // Contar ocurrencias de un patrón utilizando el FM-index
-    int countOccurrences(const std::string &pattern) {
+    // Cuenta las ocurrencias de un patrón
+    int countOccurrences(const std::string& pattern) {
         int m = pattern.size();
         int i = m - 1;
         char c = pattern[i];
+        int top = C[c];
+        int bottom = (C.find(c) != C.end()) ? C[c + 1] : bwt.size();
 
-        // Inicializar sp y ep usando la tabla C
-        int sp = (c > 0) ? C[c - 1] : 0;
-        int ep = C[c] - 1;
-
-        while (sp <= ep && i >= 1) {
-            c = pattern[--i];
-
-            // Actualizar sp y ep usando la tabla Occ
-            sp = (c > 0 ? C[c - 1] : 0) + (sp > 0 ? Occ[sp - 1][c] : 0);
-            ep = C[c] - 1 + (ep >= 0 ? Occ[ep][c] : 0);
+        while (top < bottom && i >= 0) {
+            c = pattern[i];
+            top = C[c] + ((top > 0) ? Occ[top - 1][c] : 0);
+            bottom = C[c] + Occ[bottom - 1][c];
+            i--;
         }
 
-        return (sp <= ep) ? (ep - sp + 1) : 0;
+        return (top < bottom) ? bottom - top : 0;
     }
 
     int64_t getMemorySize() const {
@@ -113,8 +132,12 @@ public:
         //size += lcpArray.capacity() * sizeof(int);
         //return size;
 
-        return sizeof(int64_t) * (bwt.size());
+        return sizeof(std::int64_t) * (bwt.size() + C.size());
 
     }
 
 };
+
+
+
+
