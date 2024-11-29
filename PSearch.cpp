@@ -20,7 +20,7 @@ using namespace std;
 void SA_creation_time(string text_original, int num_exp){
 
     ofstream outfile("output/SA_creation_time_seg.csv");
-    outfile << "Estructura,Tamaño,Segundos,Bytes" <<endl;
+    outfile << "Estructura,Tamaño,Milisegundos,Bytes" <<endl;
     
     string text;
     int target_size = 1000000;
@@ -62,7 +62,7 @@ void SA_creation_time(string text_original, int num_exp){
 void LCP_creation_time(string text_original, int num_exp){
 
     ofstream outfile("output/LCP_creation_time_seg.csv");
-    outfile << "Estructura,Tamaño,Segundos,Bytes" <<endl;
+    outfile << "Estructura,Tamaño,Milisegundos,Bytes" <<endl;
 
     string text;
     int target_size = 1000000;
@@ -101,7 +101,7 @@ void LCP_creation_time(string text_original, int num_exp){
 void FMI_creation_time(string text_original, int num_exp){
 
     ofstream outfile("output/FMI_creation_time_seg.csv");
-    outfile << "Estructura,Segundos,Bytes" <<endl;
+    outfile << "Estructura,Tamaño,Milisegundos,Bytes" <<endl;
 
     string text;
     int target_size = 1000000;
