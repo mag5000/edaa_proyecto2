@@ -49,10 +49,7 @@ void SA_creation_time(string text_original, int num_exp){
         
         }
 
-
     }
-
-
 
     outfile.close(); 
 
@@ -159,12 +156,13 @@ void SA_search_time(string text, vector<string> patterns, int num_exp){
             auto start_time = chrono::high_resolution_clock::now();
             sa.countOcurrences(patterns[i]);
             auto end_time = chrono::high_resolution_clock::now();
-            duration =+ chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count();
+            duration = chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count();
             
-        }
+            outfile << "Sufix Array," << patterns[i].size() << "," << duration <<endl;
 
-        outfile << "Sufix Array," << patterns[i].size() << "," << duration/num_exp <<endl;
-        cout<< "Pattern Size: " << patterns[i].size() << "  -  Time: " << duration/num_exp << endl;
+        }
+        
+        cout<< "Pattern Size: " << patterns[i].size() << "  -  Time: " << duration << endl;
 
     }
     
@@ -191,12 +189,14 @@ void LCP_search_time(string text, vector<string> patterns, int num_exp){
             auto start_time = chrono::high_resolution_clock::now();
             lcp.countOccurrences(patterns[i]);
             auto end_time = chrono::high_resolution_clock::now();
-            duration =+ chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count();
+            duration = chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count();
             
+            outfile << "SA+LCP," << patterns[i].size() << "," << duration <<endl;
+
         }
 
-        outfile << "SA+LCP," << patterns[i].size() << "," << duration/num_exp <<endl;
-        cout<< "Pattern Size: " << patterns[i].size() << "  -  Time: " << duration/num_exp << endl;
+        
+        cout<< "Pattern Size: " << patterns[i].size() << "  -  Time: " << duration << endl;
 
     }
     outfile.close(); 
@@ -221,12 +221,13 @@ void FMI_search_time(string text, vector<string> patterns, int num_exp){
             auto start_time = chrono::high_resolution_clock::now();
             fmi.countOccurrences(patterns[i]);
             auto end_time = chrono::high_resolution_clock::now();
-            duration =+ chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count();
+            duration = chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count();
+
+            outfile << "FMI," << patterns[i].size() << "," << duration <<endl;
 
         }
-
-        outfile << "FMI," << patterns[i].size() << "," << duration/num_exp <<endl;
-        cout<< "Pattern Size: " << patterns[i].size() << "  -  Time: " << duration/num_exp << endl;
+        
+        cout<< "Pattern Size: " << patterns[i].size() << "  -  Time: " << duration << endl;
 
     }
     outfile.close(); 

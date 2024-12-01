@@ -1,3 +1,5 @@
+// Código obtenido de las clases y modificado con con  ChatGPT de OpenAI
+
 #include <iostream>
 #include <vector>
 #include <string>
@@ -24,6 +26,7 @@ private:
         });
     }
 
+    // busca la primer posición en la que el patrón podría aparecer en el arreglo de sufijos,
     int lowerBound(const std::string& pattern) const {
         int left = 0, right = suffixArray.size() - 1;
         int m = pattern.size();
@@ -43,6 +46,7 @@ private:
         return left;
     }
 
+    // encuentra la primera posición en el arreglo de sufijos donde el patrón sería mayor que el sufijo actual
     int upperBound(const std::string& pattern) const {
         int left = 0, right = suffixArray.size() - 1;
         int m = pattern.size();
@@ -74,7 +78,7 @@ public:
         //std::cout << "Destructor llamado, memoria liberada." << std::endl;
     }
 
-    // Función count: Cuenta el número de ocurrencias del patrón
+    // Función que cuenta el número de ocurrencias del patrón
     int countOcurrences(const std::string& pattern) const {
         if (pattern.empty()) return 0;
 
@@ -84,18 +88,8 @@ public:
         return end - start;
     }
 
+    //Función que retorna el tamaño utilizado
     int64_t getMemorySize() const {
-        //size_t size = sizeof(suffix_array); // Tamaño estático de la instancia (sin contar texto y suffixArray)
-        
-        // Agregar tamaño del string `text`
-        //size += text.capacity(); // Usamos `capacity()` en lugar de `size()` para incluir la memoria asignada dinámicamente
-        
-        // Agregar tamaño del vector `suffixArray`
-        //size += suffixArray.capacity() * sizeof(int); // `capacity()` para contar la memoria reservada
-
-        //return size;
-
-        // se agrega el m todo para retornar el tama o del SA
         
         return sizeof(std::int64_t) * suffixArray.size();
 

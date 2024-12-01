@@ -1,3 +1,5 @@
+// Código generado con  ChatGPT de OpenAI
+
 #include <iostream>
 #include <vector>
 #include <string>
@@ -98,13 +100,9 @@ public:
         return count;
     }
 
+    // Retorna el tamaño de la estructura
     int64_t getMemorySize() const {
-        //size_t size = sizeof(SuffixArrayLCP);
-        //size += text.capacity();
-        //size += suffixArray.capacity() * sizeof(int);
-        //size += lcpArray.capacity() * sizeof(int);
-        //return size;
-
+        
         return sizeof(std::int64_t) * (suffixArray.size() + lcpArray.size());
 
     }

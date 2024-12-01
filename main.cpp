@@ -32,7 +32,7 @@ string readFile(const string& filePath) {
 
 
 
-
+// Funcion que obtiene substrings del texto recibido por parametro
 string getRandomSubstring(const string& str, int substringLength) {
 
     int strLength = str.length();
@@ -55,19 +55,12 @@ string getRandomSubstring(const string& str, int substringLength) {
 int main() {
 
     // Lectura del archivo a utilizar --------------------------------------------------------
-    std::string filePath = "sources";   
+    std::string filePath = "dna";   
     std::string text_original = readFile(filePath);
-    // std::string text = "bananananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db ana nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe dbnanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db    nanananana nananan ananana nanana bana banaba nbanabanabnabanababa banana bana kdfgkajshd iuawhe db";
-    //std::string text = "banana banana";
-    //cout<< "Lectura de texto: OK" << endl << endl; 
-    //cout << "Length: " << text.length() <<endl;
-    //cout << "Size: " << sizeof(text) <<endl;
 
     int times = 0;
     int target_size = 10000000;
     string text;
-
-    //para textos de largo 100mil a 1millon
     
     if (text_original.length() > target_size) {
         text = text_original.substr(0, target_size);
@@ -80,35 +73,24 @@ int main() {
     SA_creation_time(text, 100);
     LCP_creation_time(text, 100);
     FMI_creation_time(text, 100);
-
-    // pruebas de busqueda simples: -----------------------------------------------------------
     
-    // suffix_array sa(text);// creación suffix_array;
-    // times = sa.countOcurrences("ban");
-    // cout << "SA times:" << times <<endl;
+    // Experimentos de búsqueda --------------------------------------------------------------
+    vector<string> patterns;
 
-    // SuffixArrayLCP lcp(text);
-    // times = lcp.countOccurrences("ban");
-    // cout << "LCP times:" << times <<endl;
+//  Creacion de los patrones a buscar que si están en el texto  
+    for (int i = 10 ; i<=100 ; i=i+10 ){
+        patterns.push_back(getRandomSubstring(text,i));
+    }
 
-    // FMIndex fmi(text);
-    // times = fmi.countOccurrences("ban");
-    // std::cout << "FMI times:" << times <<std::endl;
+//  para crear valores que no estan en el texto
+//    for (int i = 10; i <= 100; i += 10) {
+//        patterns.push_back(std::string(i, 'z')); // Crea un string de longitud 'i' con 'z'
+//    }
 
-    
-    // Experimentos de búsqueda complejos --------------------------------------------------------------
-    //vector<string> patterns;
-    //for (int i = 10 ; i<=100 ; i=i+10 ){
-    //    patterns.push_back(getRandomSubstring(text,i));
-    //}
-    
-    //cout<< " ========== Búsqueda =========== " << endl;
-    //SA_search_time(text, patterns, 1);
-    //LCP_search_time(text, patterns, 1);
-    //FMI_search_time(text, patterns, 1);
-
-
-
+    cout<< " ========== Búsqueda =========== " << endl;
+    SA_search_time(text, patterns, 100);
+    LCP_search_time(text, patterns, 100);
+    FMI_search_time(text, patterns, 100);
     
     return 0;
 }

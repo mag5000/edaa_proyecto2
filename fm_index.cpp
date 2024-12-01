@@ -1,3 +1,5 @@
+// Codigo generado con ChatGPT de OpenAI
+
 #include <sdsl/suffix_arrays.hpp>
 #include <string>
 #include <iostream>
